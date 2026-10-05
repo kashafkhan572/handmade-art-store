@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Custom Order | Sophisticia</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="custom-order-page form-page">
+
+ <!-- navbar -->
+ <nav class="navbar navbar-expand-lg site-nav sticky-top">
+  <div class="container">
+ <a class="navbar-brand" href="/">
+     <img src="/image/Screenshot_2026-09-16_002159-removebg-preview.png" alt="" width="34" height="34" class="d-inline-block align-text-top">
+      Sophisticia
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavigation" aria-controls="mainNavigation" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="mainNavigation">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/shop">Shop</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            More Options
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/custom-order">Custom Order</a></li>
+            <li><a class="dropdown-item" href="/signup">Log In / Sign Up</a></li>
+            <li><a class="dropdown-item" href="/logout">Log Out</a></li>
+            
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/cart">Cart</a>
+        </li>
+      </ul>
+      <form class="d-flex" role="search">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+    </div>
+  </div>
+</nav>
+
+    <div class="container py-5">
+
+        <h1 class="text-center mb-3">Custom Order</h1>
+
+        <p class="text-center text-muted mb-5">
+            Have something special in mind? Tell us what you'd like us to create.
+        </p>
+
+        <div class="row justify-content-center">
+
+            <div class="col-lg-7">
+
+                <div class="card shadow-sm border-0 form-panel">
+                    <div class="card-body p-4">
+
+                        <form id="customOrderForm">
+
+                            <div class="mb-3">
+                                <label for="name" class="form-label">
+                                    Your Name
+                                </label>
+
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="name"
+                                    required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">
+                                    Phone Number
+                                </label>
+
+                                <input
+                                    type="tel"
+                                    class="form-control"
+                                    id="phone"
+                                    required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="type" class="form-label">
+                                    What would you like?
+                                </label>
+
+                                <select class="form-select" id="type" required>
+                                    <option value="">Choose an option</option>
+                                    <option value="Hand-painted Clothing">
+                                        Hand-painted Clothing
+                                    </option>
+                                    <option value="Resin Craft">
+                                        Resin Craft
+                                    </option>
+                                    <option value="Artwork">
+                                        Artwork
+                                    </option>
+                                    <option value="Other">
+                                        Other
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="description" class="form-label">
+                                    Describe Your Idea
+                                </label>
+
+                                <textarea
+                                    class="form-control"
+                                    id="description"
+                                    rows="5"
+                                    placeholder="Tell us about your idea, preferred colors, design, size, etc."
+                                    required></textarea>
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="budget" class="form-label">
+                                    Approximate Budget
+                                </label>
+
+                                <input
+                                    type="number"
+                                    class="form-control"
+                                    id="budget"
+                                    placeholder="PKR">
+                            </div>
+
+                            <button
+                                type="submit"
+                                class="btn btn-dark w-100">
+                                Submit Custom Request
+                            </button>
+
+                        </form>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+    const customOrderForm =
+        document.getElementById("customOrderForm");
+
+    customOrderForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const customOrder = {
+            name: document.getElementById("name").value,
+            phone: document.getElementById("phone").value,
+            type: document.getElementById("type").value,
+            description: document.getElementById("description").value,
+            budget: document.getElementById("budget").value
+        };
+
+        try {
+            const response = await fetch("/api/custom-orders", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(customOrder)
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                alert(result.message);
+                customOrderForm.reset();
+            } else {
+                alert("Something went wrong!");
+            }
+
+        } catch (error) {
+            console.error("Error:", error);
+            alert("Could not submit the custom order.");
+        }
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+
+</body>
+</html>

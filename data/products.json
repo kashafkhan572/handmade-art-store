@@ -1,0 +1,38 @@
+
+[
+    {
+        "id": 1,
+        "name": "Floral Painted T-Shirt",
+        "category": "Painted Wear",
+        "price": 2500,
+        "image": "/image/flshirt.png"
+    },
+    {
+        "id": 2,
+        "name": "Resin Flower Bookmark",
+        "category": "Resin Crafts",
+        "price": 600,
+        "image": "/image/bm.png"
+    },
+    {
+        "id": 3,
+        "name": "Mini Canvas Artwork",
+        "category": "Artwork",
+        "price": 1500,
+        "image": "/image/pos.png"
+    },
+    {
+        "id": 4,
+        "name": "Custom Resin Keychain",
+        "category": "Resin Crafts",
+        "price": 800,
+        "image": "/image/kc.png"
+    },
+    {
+    "id": 5,
+    "name": "Hand Painted Tote Bag",
+    "category": "Painted Wear",
+    "price": 1800,
+    "image": "/image/totebag.png"
+}
+]
