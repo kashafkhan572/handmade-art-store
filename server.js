@@ -9,7 +9,7 @@ const express = require("express");
 const path = require ("path");
 const products = require("./data/products.json");
 const session = require("express-session");
-const MongoStore = require("connect-mongo");
+const { MongoStore } = require("connect-mongo");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
