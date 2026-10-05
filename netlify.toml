@@ -1,0 +1,14 @@
+[build]
+  command = "npm ci"
+  publish = "public"
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+  external_node_modules = ["express", "ejs", "express-session", "connect-mongo", "mongoose", "mongodb", "serverless-http"]
+  included_files = ["views/**", "data/**"]
+
+[[redirects]]
+  from = "/*"
+  to = "/.netlify/functions/server/:splat"
+  status = 200

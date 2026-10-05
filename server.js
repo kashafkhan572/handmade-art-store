@@ -9,19 +9,25 @@ const express = require("express");
 const path = require ("path");
 const products = require("./data/products.json");
 const session = require("express-session");
+const MongoStore = require("connect-mongo");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.set("view engine", "ejs")
-app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "ejs");
+app.set("views", path.join(process.cwd(), "views"));
+app.set("trust proxy", 1);
 
-app.use(express.static("public"));
+if (!process.env.NETLIFY) {
+    app.use(express.static(path.join(__dirname, "public")));
+}
 app.use(express.json());
 
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI }),
+    cookie: { secure: "auto", httpOnly: true, sameSite: "lax" }
 }));
 
 app.get("/", (req, res) => {
@@ -363,14 +369,36 @@ app.post("/api/custom-orders", async (req, res) => {
     }
 });
 
-mongoose.connect(process.env.MONGODB_URI)
-    .then(() => {
-        console.log("MongoDB connected successfully");
+let mongoConnectionPromise;
 
-        app.listen(PORT, () => {
-            console.log(`Server running at http://localhost:${PORT}`);
+function connectToDatabase() {
+    if (mongoose.connection.readyState === 1) {
+        return Promise.resolve();
+    }
+
+    if (!mongoConnectionPromise) {
+        mongoConnectionPromise = mongoose.connect(process.env.MONGODB_URI)
+            .catch((error) => {
+                mongoConnectionPromise = null;
+                throw error;
+            });
+    }
+
+    return mongoConnectionPromise;
+}
+
+module.exports = { app, connectToDatabase };
+
+if (require.main === module) {
+    connectToDatabase()
+        .then(() => {
+            console.log("MongoDB connected successfully");
+            app.listen(PORT, () => {
+                console.log("Server running at http://localhost:" + PORT);
+            });
+        })
+        .catch((error) => {
+            console.error("MongoDB connection error:", error);
+            process.exitCode = 1;
         });
-    })
-    .catch((error) => {
-        console.error("MongoDB connection error:", error);
-    });
+}

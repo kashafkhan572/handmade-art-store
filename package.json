@@ -16,6 +16,8 @@
     "ejs": "^6.0.1",
     "express": "^5.2.1",
     "express-session": "^1.19.0",
-    "mongoose": "^9.10.2"
+    "mongoose": "^9.10.2",
+    "connect-mongo": "^6.0.0",
+    "serverless-http": "^4.0.0"
   }
 }
